@@ -5,7 +5,7 @@ import 'package:interactive_project/utile/login_botton.dart';
 import 'package:interactive_project/utile/prescription_textfield.dart';
 
 class PrescriptionFormPage extends StatefulWidget {
-  const PrescriptionFormPage({Key? key}) : super(key: key);
+  const PrescriptionFormPage({super.key});
 
   @override
   _PrescriptionFormPageState createState() => _PrescriptionFormPageState();

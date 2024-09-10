@@ -10,12 +10,12 @@ class UploadPrescription extends StatefulWidget {
   final String? Function(File?)? validator;
 
   const UploadPrescription({
-    Key? key,
+    super.key,
     required this.labelText,
     this.showStar = false,
     required this.onImageSelected,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   _UploadPrescriptionState createState() => _UploadPrescriptionState();
