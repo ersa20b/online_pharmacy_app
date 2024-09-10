@@ -42,7 +42,7 @@ class PrescriptionTextfield extends StatelessWidget {
               ],
             ),
           ),
-          // الحقول التي لا يوجد بها نجمة 
+        // الحقول التي لا يوجد بها نجمة
         if (labelText != null &&
             !showStar) // عرض التسمية فقط إذا لم تكن null و showStar false
           Text(
@@ -51,20 +51,20 @@ class PrescriptionTextfield extends StatelessWidget {
               textStyle: TextStyle(color: Colors.grey.shade600, fontSize: 16),
             ),
           ),
-          // كود الحقل 
+        // كود الحقل
         const SizedBox(height: 8), // المسافة بين التسمية والحقل
         TextFormField(
           textAlign: TextAlign.right, // محاذاة النص إلى اليمين
           textDirection: TextDirection.rtl, // تحديد اتجاه النص لليمين
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-             borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(8.0),
               borderSide: BorderSide(
                 color: Theme.of(context).primaryColor,
                 width: 1.0,
               ),
             ),
-            // كود الفوكس للحقول 
+            // كود الفوكس للحقول
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.0),
               borderSide: BorderSide(

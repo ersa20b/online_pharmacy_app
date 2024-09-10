@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interactive_project/utile/order_details.dart';
 import 'package:interactive_project/screens/home_page.dart';
 import 'package:interactive_project/screens/login_page.dart';
 import 'package:interactive_project/screens/notifications_page.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/main': (context) => const HomePage(),
         '/prescription': (context) => const PrescriptionFormPage(),
         '/notifications': (context) => const NotificationsPage(),
+        '/orderdetails': (context) => const OrderDetailsPage(),
         '/signup': (context) => const SignupPage(),
       },
     );

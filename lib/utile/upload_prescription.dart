@@ -10,34 +10,33 @@ class UploadPrescription extends StatefulWidget {
   final String? Function(File?)? validator;
 
   const UploadPrescription({
-    Key? key,
+    super.key,
     required this.labelText,
     this.showStar = false,
     required this.onImageSelected,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
-  _UploadPrescriptionState createState() => _UploadPrescriptionState();
+  UploadPrescriptionState createState() => UploadPrescriptionState();
 }
 
-class _UploadPrescriptionState extends State<UploadPrescription> {
+class UploadPrescriptionState extends State<UploadPrescription> {
   File? _image;
   final ImagePicker _picker = ImagePicker();
-  List<bool> _checkboxValues =
-      List.generate(9, (index) => false); // حالة صناديق الاختيار
+  bool _showCheckboxes = false;
+  // قائمة لتخزين حالة كل صندوق اختيار
+  List<bool> _checkboxValues = List.generate(8, (index) => false);
 
-  final List<String> _medicineNames = [
-    'الدواء الأول',
-    'الدواء الثاني',
-    'الدواء الثالث',
-    'الدواء الرابع',
-    'الدواء الخامس',
-    'الدواء السادس',
-    'الدواء السابع',
-    'الدواء الثامن',
-    'جميع الأدوية'
-  ];
+  // دالة لإعادة تعيين الصورة
+  void resetImage() {
+    setState(() {
+      _image = null;
+      _showCheckboxes = false;
+      _checkboxValues =
+          List.generate(8, (index) => false); // إعادة تعيين حالة الصناديق
+    });
+  }
 
   Future<void> _pickImage() async {
     showModalBottomSheet(
@@ -54,9 +53,10 @@ class _UploadPrescriptionState extends State<UploadPrescription> {
                   Navigator.of(context).pop();
                   final pickedFile =
                       await _picker.pickImage(source: ImageSource.camera);
-                  if (pickedFile != null) {
+                  if (pickedFile != null && pickedFile.path.isNotEmpty) {
                     setState(() {
                       _image = File(pickedFile.path);
+                      _showCheckboxes = true; // عرض صناديق الاختيار
                       widget.onImageSelected(_image);
                     });
                   }
@@ -69,9 +69,10 @@ class _UploadPrescriptionState extends State<UploadPrescription> {
                   Navigator.of(context).pop();
                   final pickedFile =
                       await _picker.pickImage(source: ImageSource.gallery);
-                  if (pickedFile != null) {
+                  if (pickedFile != null && pickedFile.path.isNotEmpty) {
                     setState(() {
                       _image = File(pickedFile.path);
+                      _showCheckboxes = true; // عرض صناديق الاختيار
                       widget.onImageSelected(_image);
                     });
                   }
@@ -87,9 +88,16 @@ class _UploadPrescriptionState extends State<UploadPrescription> {
   void _removeImage() {
     setState(() {
       _image = null;
+      _showCheckboxes = false; // إخفاء صناديق الاختيار
+      _checkboxValues =
+          List.generate(8, (index) => false); // إعادة تعيين حالة الصناديق
       widget.onImageSelected(null);
-      _checkboxValues = List.generate(
-          9, (index) => false); // إعادة تعيين حالة صناديق الاختيار
+    });
+  }
+
+  void _onCheckboxChanged(int index, bool? value) {
+    setState(() {
+      _checkboxValues[index] = value ?? false;
     });
   }
 
@@ -98,27 +106,13 @@ class _UploadPrescriptionState extends State<UploadPrescription> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: widget.labelText,
-                style: GoogleFonts.cairo(
-                  textStyle: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              if (widget.showStar)
-                const TextSpan(
-                  text: ' *',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 16,
-                  ),
-                ),
-            ],
+        Text(
+          widget.labelText,
+          style: GoogleFonts.cairo(
+            textStyle: TextStyle(
+              color: Colors.grey.shade600,
+              fontSize: 16,
+            ),
           ),
         ),
         const SizedBox(height: 8),
@@ -188,30 +182,16 @@ class _UploadPrescriptionState extends State<UploadPrescription> {
                   ),
                 ],
               ),
-        const SizedBox(height: 16),
-        if (_image != null)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...List.generate(_medicineNames.length, (index) {
-                return CheckboxListTile(
-                  title:
-                      Text(_medicineNames[index], style: GoogleFonts.cairo()),
-                  value: _checkboxValues[index],
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _checkboxValues[index] = value!;
-                    });
-                  },
-                );
-              }),
-              if (widget.validator != null && widget.validator!(_image) != null)
-                Text(
-                  widget.validator!(_image) ?? '',
-                  style: const TextStyle(color: Colors.red),
-                ),
-            ],
-          ),
+        if (_showCheckboxes) ...[
+          const SizedBox(height: 15),
+          ...List.generate(8, (index) {
+            return CheckboxListTile(
+              title: Text('الدواء ${index + 1}'),
+              value: _checkboxValues[index],
+              onChanged: (value) => _onCheckboxChanged(index, value),
+            );
+          }),
+        ],
       ],
     );
   }

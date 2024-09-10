@@ -6,8 +6,7 @@ class BottomNavWidget extends StatelessWidget {
   final Function(int) onTabChange;
 
   const BottomNavWidget(
-      {Key? key, required this.selectedIndex, required this.onTabChange})
-      : super(key: key);
+      {super.key, required this.selectedIndex, required this.onTabChange});
 
   @override
   Widget build(BuildContext context) {

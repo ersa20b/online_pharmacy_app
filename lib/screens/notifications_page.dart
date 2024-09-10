@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+//import 'package:google_fonts/google_fonts.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -8,10 +9,34 @@ class NotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Text(
-          'هنا ستصل جميع الاشعارات للمستخدم ',
-          style: GoogleFonts.cairo(textStyle: const TextStyle(fontSize: 18)),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: [
+            Card(
+              //color: Theme.of(context).primaryColor,
+              child: ListTile(
+                leading: const Icon(
+                  Icons.notifications_active,
+                ),
+                title: Text(
+                  'صيدلية النوفليين المركزية',
+                  style:
+                      GoogleFonts.cairo(color: Theme.of(context).primaryColor),
+                ),
+                subtitle: Text(
+                  'عميلنا العزيز,دواءك متوفر داخل الصيدلية',
+                  style: GoogleFonts.cairo(color: Colors.black),
+                ),
+                trailing: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/orderdetails');
+                  },
+                  icon: const Icon(Icons.remove_red_eye),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
