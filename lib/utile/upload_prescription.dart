@@ -10,12 +10,12 @@ class UploadPrescription extends StatefulWidget {
   final String? Function(File?)? validator;
 
   const UploadPrescription({
-    super.key,
+    Key? key,
     required this.labelText,
     this.showStar = false,
     required this.onImageSelected,
     this.validator,
-  });
+  }) : super(key: key);
 
   @override
   UploadPrescriptionState createState() => UploadPrescriptionState();
@@ -25,16 +25,16 @@ class UploadPrescriptionState extends State<UploadPrescription> {
   File? _image;
   final ImagePicker _picker = ImagePicker();
   bool _showCheckboxes = false;
+
   // قائمة لتخزين حالة كل صندوق اختيار
-  List<bool> _checkboxValues = List.generate(8, (index) => false);
+  List<bool> _checkboxValues = List.generate(9, (index) => false);
 
   // دالة لإعادة تعيين الصورة
   void resetImage() {
     setState(() {
       _image = null;
       _showCheckboxes = false;
-      _checkboxValues =
-          List.generate(8, (index) => false); // إعادة تعيين حالة الصناديق
+      _checkboxValues = List.generate(9, (index) => false); // إعادة تعيين حالة الصناديق
     });
   }
 
@@ -51,8 +51,7 @@ class UploadPrescriptionState extends State<UploadPrescription> {
                 title: const Text('التقاط صورة'),
                 onTap: () async {
                   Navigator.of(context).pop();
-                  final pickedFile =
-                      await _picker.pickImage(source: ImageSource.camera);
+                  final pickedFile = await _picker.pickImage(source: ImageSource.camera);
                   if (pickedFile != null && pickedFile.path.isNotEmpty) {
                     setState(() {
                       _image = File(pickedFile.path);
@@ -67,8 +66,7 @@ class UploadPrescriptionState extends State<UploadPrescription> {
                 title: const Text('اختيار من الاستوديو'),
                 onTap: () async {
                   Navigator.of(context).pop();
-                  final pickedFile =
-                      await _picker.pickImage(source: ImageSource.gallery);
+                  final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
                   if (pickedFile != null && pickedFile.path.isNotEmpty) {
                     setState(() {
                       _image = File(pickedFile.path);
@@ -89,8 +87,7 @@ class UploadPrescriptionState extends State<UploadPrescription> {
     setState(() {
       _image = null;
       _showCheckboxes = false; // إخفاء صناديق الاختيار
-      _checkboxValues =
-          List.generate(8, (index) => false); // إعادة تعيين حالة الصناديق
+      _checkboxValues = List.generate(9, (index) => false); // إعادة تعيين حالة الصناديق
       widget.onImageSelected(null);
     });
   }
@@ -120,8 +117,7 @@ class UploadPrescriptionState extends State<UploadPrescription> {
             ? GestureDetector(
                 onTap: _pickImage,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     border: Border.all(
@@ -191,6 +187,11 @@ class UploadPrescriptionState extends State<UploadPrescription> {
               onChanged: (value) => _onCheckboxChanged(index, value),
             );
           }),
+          CheckboxListTile(
+            title: const Text('جميع الأدوية'),
+            value: _checkboxValues[8],
+            onChanged: (value) => _onCheckboxChanged(8, value),
+          ),
         ],
       ],
     );
